@@ -1,0 +1,8 @@
+.env
+tunnukset.*
+*.txt
+profiilikuvat/*
+Validators.txt
+-new.php
+/temp/*
+validointi-valmis/*
