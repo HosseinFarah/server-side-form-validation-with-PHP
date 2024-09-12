@@ -180,12 +180,11 @@ if (isset($_POST['painike']) == true) {
     <div class="container">
         <div class="row">
             <h1>Create New Film</h1>
+            <div id="ilmoitukset" class="col-md-12 alert alert-<?= $success; ?> alert-dismissible fade show <?= $display ?? ""; ?>" role="alert">
+                <p><?= $message; ?></p>
+            </div>
             <div class="col-md-12 d-flex justify-content-center align-items-center">
-                <?php
-                if (!empty($message)) {
-                    echo '<div class="alert alert-success">' . $message . '</div>';
-                }
-                ?>
+
                 <form method="post" class="row g-5" novalidate>
                     <div class="col-sm-8">
                         <label for="title" class="form-label">Title</label>
@@ -318,10 +317,7 @@ if (isset($_POST['painike']) == true) {
                         <button class="btn btn-primary" type="submit" name="painike">Create</button>
                     </div>
                 </form>
-                <div id="ilmoitukset" class="alert alert-<?= $success; ?> alert-dismissible fade show <?= $display ?? ""; ?>" role="alert">
-                    <p><?= $message; ?></p>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
+
                 <?php include 'footer.php'; ?>
             </div>
         </div>
