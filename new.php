@@ -178,150 +178,153 @@ if (isset($_POST['painike']) == true) {
 <body>
     <?php include 'nav.php'; ?>
     <div class="container">
-        <h1>Create New Film</h1>
+        <div class="row">
+            <h1>Create New Film</h1>
+            <div class="col-md-12 d-flex justify-content-center align-items-center">
+                <?php
+                if (!empty($message)) {
+                    echo '<div class="alert alert-success">' . $message . '</div>';
+                }
+                ?>
+                <form method="post" class="row g-5" novalidate>
+                    <div class="col-sm-8">
+                        <label for="title" class="form-label">Title</label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control <?= is_invalid('title'); ?>" name="title" id="title" title="Please enter a title." placeholder="Type your title!" value="<?= $title; ?>" pattern="<?= pattern('title'); ?>" required>
+                            <div class="invalid-feedback">
+                                <?= $errors['title'] ?? ""; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <label for="description" class="form-label">Description</label>
+                        <div class="input-group has-validation">
+                            <textarea class="form-control <?= is_invalid('description'); ?>" name="description" id="description" title="Please enter a description." placeholder="Type your description!" pattern="<?= pattern('description'); ?>" required><?= $description; ?></textarea>
+                            <div class="invalid-feedback">
+                                <?= $errors['description'] ?? ""; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <label for="release_year" class="form-label">Release Year</label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control <?= is_invalid('release_year'); ?>" name="release_year" id="release_year" title="Please enter a release year." placeholder="Type your release year!" value="<?= $release_year; ?>" pattern="<?= pattern('release_year'); ?>" required>
+                            <div class="invalid-feedback">
+                                <?= $errors['release_year'] ?? ""; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <label for="language_id" class="form-label">Language</label>
+                        <div class="input-group has-validation">
+                            <select class="form-select <?= is_invalid('language_id'); ?>" name="language_id" id="language_id" title="Please select a language." required>
+                                <option value="">Select a language</option>
+                                <?php
+                                $query_language = "SELECT * FROM language";
+                                $result_language = my_query($query_language);
+                                if ($result_language->num_rows > 0) {
+                                    while ($row = $result_language->fetch_assoc()) {
+                                        $selected = ($language_id == $row['language_id']) ? 'selected' : '';
+                                        echo "<option value='" . $row['language_id'] . "' $selected>" . $row['name'] . "</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <div class="invalid-feedback">
+                                <?= $errors['language_id'] ?? ""; ?>
+                            </div>
+                        </div>
+                    </div>
 
-        <?php
-        if (!empty($message)) {
-            echo '<div class="alert alert-success">' . $message . '</div>';
-        }
-        ?>
-        <form method="post" class="row g-5" novalidate>
-            <div class="col-md-4">
-                <label for="title" class="form-label">Title</label>
-                <div class="input-group has-validation">
-                    <input type="text" class="form-control <?= is_invalid('title'); ?>" name="title" id="title" title="Please enter a title." placeholder="Type your title!" value="<?= $title; ?>" pattern="<?= pattern('title'); ?>" required>
-                    <div class="invalid-feedback">
-                        <?= $errors['title'] ?? ""; ?>
+                    <div class="col-sm-8">
+                        <label for="rental_duration" class="form-label">Rental Duration</label>
+                        <div class="input-group has-validation">
+                            <select class="form-select <?= is_invalid('rental_duration'); ?>" name="rental_duration" id="rental_duration" required>
+                                <option value="">Select a rental duration</option>
+                                <?php for ($i = 1; $i <= 7; $i++): ?>
+                                    <option value="<?= $i; ?>" <?= $i == $rental_duration ? 'selected' : ''; ?>><?= $i; ?></option>
+                                <?php endfor; ?>
+                            </select>
+                            <div class="invalid-feedback">
+                                <?= $errors['rental_duration'] ?? ""; ?>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <label for="description" class="form-label">Description</label>
-                <div class="input-group has-validation">
-                    <textarea class="form-control <?= is_invalid('description'); ?>" name="description" id="description" title="Please enter a description." placeholder="Type your description!" pattern="<?= pattern('description'); ?>" required><?= $description; ?></textarea>
-                    <div class="invalid-feedback">
-                        <?= $errors['description'] ?? ""; ?>
+                    <div class="col-sm-8">
+                        <label for="rental_rate" class="form-label">Rental Rate</label>
+                        <div class="input-group has-validation">
+                            <input type="number" class="form-control <?= is_invalid('rental_rate'); ?>" name="rental_rate" id="rental_rate" value="<?= $rental_rate; ?>" title="Please enter a rental rate (0.99-4.99)" placeholder="Type your rental rate!" required>
+                            <div class="invalid-feedback">
+                                <?= $errors['rental_rate'] ?? ""; ?>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <label for="release_year" class="form-label">Release Year</label>
-                <div class="input-group has-validation">
-                    <input type="text" class="form-control <?= is_invalid('release_year'); ?>" name="release_year" id="release_year" title="Please enter a release year." placeholder="Type your release year!" value="<?= $release_year; ?>" pattern="<?= pattern('release_year'); ?>" required>
-                    <div class="invalid-feedback">
-                        <?= $errors['release_year'] ?? ""; ?>
+                    <div class="col-sm-8">
+                        <label for="length" class="form-label">Length</label>
+                        <div class="input-group has-validation">
+                            <input type="number" class="form-control <?= is_invalid('length'); ?>" name="length" id="length" value="<?= $length; ?>" title="Please enter a length (5-200)" placeholder="Type your length!" required>
+                            <div class="invalid-feedback">
+                                <?= $errors['length'] ?? ""; ?>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <label for="language_id" class="form-label">Language</label>
-                <div class="input-group has-validation">
-                    <select class="form-select <?= is_invalid('language_id'); ?>" name="language_id" id="language_id" title="Please select a language." required>
-                        <option value="">Select a language</option>
-                        <?php
-                        $query_language = "SELECT * FROM language";
-                        $result_language = my_query($query_language);
-                        if ($result_language->num_rows > 0) {
-                            while ($row = $result_language->fetch_assoc()) {
-                                $selected = ($language_id == $row['language_id']) ? 'selected' : '';
-                                echo "<option value='" . $row['language_id'] . "' $selected>" . $row['name'] . "</option>";
+                    <div class="col-sm-8">
+                        <label for="replacement_cost" class="form-label">Replacement Cost</label>
+                        <div class="input-group has-validation">
+                            <input type="number" class="form-control <?= is_invalid('replacement_cost'); ?>" name="replacement_cost" id="replacement_cost" value="<?= $replacement_cost; ?>" title="Please enter a replacement cost (9.99-29.99)" placeholder="Type your replacement cost!" required>
+                            <div class="invalid-feedback">
+                                <?= $errors['replacement_cost'] ?? ""; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <label for="rating" class="form-label">Rating</label>
+                        <div class="input-group has-validation">
+                            <select class="form-select <?= is_invalid('rating'); ?>" name="rating" id="rating" required>
+                                <?php
+                                $ratings = array("", "G", "PG", "PG-13", "R", "NC-17");
+                                foreach ($ratings as $rating_option) {
+                                    $selected = ($rating_option == $rating) ? 'selected' : '';
+                                    echo "<option value='$rating_option' $selected>$rating_option</option>";
+                                }
+                                ?>
+                            </select>
+                            <div class="invalid-feedback">
+                                <?= $errors['rating'] ?? ""; ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <label for="special_features" class="form-label">Special Features</label>
+                        <div class="input-group has-validation">
+                            <?php
+                            $special_features_options = array("Trailers", "Commentaries", "Deleted Scenes", "Behind the Scenes");
+                            foreach ($special_features_options as $special_feature_option) {
+                                $checked = (in_array($special_feature_option, $special_features_array)) ? 'checked' : '';
+                                echo "<div class='form-check'>";
+                                echo "<input class='form-check-input' type='checkbox' name='special_features[]' id='$special_feature_option' value='$special_feature_option' $checked>";
+                                echo "<label class='form-check-label' for='$special_feature_option'>$special_feature_option</label>";
+                                echo "</div>";
                             }
-                        }
-                        ?>
-                    </select>
-                    <div class="invalid-feedback">
-                        <?= $errors['language_id'] ?? ""; ?>
+                            ?>
+                            <div class="invalid-feedback">
+                                <?= $errors['special_features'] ?? ""; ?>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="col-md-4">
-                <label for="rental_duration" class="form-label">Rental Duration</label>
-                <div class="input-group has-validation">
-                    <select class="form-select <?= is_invalid('rental_duration'); ?>" name="rental_duration" id="rental_duration" required>
-                        <option value="">Select a rental duration</option>
-                        <?php for ($i = 1; $i <= 7; $i++): ?>
-                            <option value="<?= $i; ?>" <?= $i == $rental_duration ? 'selected' : ''; ?>><?= $i; ?></option>
-                        <?php endfor; ?>
-                    </select>
-                    <div class="invalid-feedback">
-                        <?= $errors['rental_duration'] ?? ""; ?>
+                    <div class="form-group col-12 mb-3">
+                        <button class="btn btn-primary" type="submit" name="painike">Create</button>
                     </div>
+                </form>
+                <div id="ilmoitukset" class="alert alert-<?= $success; ?> alert-dismissible fade show <?= $display ?? ""; ?>" role="alert">
+                    <p><?= $message; ?></p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
+                <?php include 'footer.php'; ?>
             </div>
-            <div class="col-md-4">
-                <label for="rental_rate" class="form-label">Rental Rate</label>
-                <div class="input-group has-validation">
-                    <input type="number" class="form-control <?= is_invalid('rental_rate'); ?>" name="rental_rate" id="rental_rate" value="<?= $rental_rate; ?>" title="Please enter a rental rate (0.99-4.99)" placeholder="Type your rental rate!" required>
-                    <div class="invalid-feedback">
-                        <?= $errors['rental_rate'] ?? ""; ?>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <label for="length" class="form-label">Length</label>
-                <div class="input-group has-validation">
-                    <input type="number" class="form-control <?= is_invalid('length'); ?>" name="length" id="length" value="<?= $length; ?>" title="Please enter a length (5-200)" placeholder="Type your length!" required>
-                    <div class="invalid-feedback">
-                        <?= $errors['length'] ?? ""; ?>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <label for="replacement_cost" class="form-label">Replacement Cost</label>
-                <div class="input-group has-validation">
-                    <input type="number" class="form-control <?= is_invalid('replacement_cost'); ?>" name="replacement_cost" id="replacement_cost" value="<?= $replacement_cost; ?>" title="Please enter a replacement cost (9.99-29.99)" placeholder="Type your replacement cost!" required>
-                    <div class="invalid-feedback">
-                        <?= $errors['replacement_cost'] ?? ""; ?>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <label for="rating" class="form-label">Rating</label>
-                <div class="input-group has-validation">
-                    <select class="form-select <?= is_invalid('rating'); ?>" name="rating" id="rating" required>
-                        <?php
-                        $ratings = array("", "G", "PG", "PG-13", "R", "NC-17");
-                        foreach ($ratings as $rating_option) {
-                            $selected = ($rating_option == $rating) ? 'selected' : '';
-                            echo "<option value='$rating_option' $selected>$rating_option</option>";
-                        }
-                        ?>
-                    </select>
-                    <div class="invalid-feedback">
-                        <?= $errors['rating'] ?? ""; ?>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <label for="special_features" class="form-label">Special Features</label>
-                <div class="input-group has-validation">
-                    <?php
-                    $special_features_options = array("Trailers", "Commentaries", "Deleted Scenes", "Behind the Scenes");
-                    foreach ($special_features_options as $special_feature_option) {
-                        $checked = (in_array($special_feature_option, $special_features_array)) ? 'checked' : '';
-                        echo "<div class='form-check'>";
-                        echo "<input class='form-check-input' type='checkbox' name='special_features[]' id='$special_feature_option' value='$special_feature_option' $checked>";
-                        echo "<label class='form-check-label' for='$special_feature_option'>$special_feature_option</label>";
-                        echo "</div>";
-                    }
-                    ?>
-                    <div class="invalid-feedback">
-                        <?= $errors['special_features'] ?? ""; ?>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-12 mb-6">
-                <button class="btn btn-primary" type="submit" name="painike">Create</button>
-            </div>
-        </form>
-        <div id="ilmoitukset" class="alert alert-<?= $success; ?> alert-dismissible fade show <?= $display ?? ""; ?>" role="alert">
-            <p><?= $message; ?></p>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <?php include 'footer.php'; ?>
     </div>
 </body>
 
