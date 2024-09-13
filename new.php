@@ -21,7 +21,7 @@ $pakolliset = array("title", "description", "release_year", "language_id", "rent
 $title = $description = $release_year = $language_id = $rental_duration = $rental_rate = $length = $replacement_cost = $rating = $special_features = "";
 $special_features_array = [];
 
-if (isset($_POST['painike']) == true) {
+if (isset($_POST['painike'])) {
     $title = $_POST["title"] ?? "";
     $kentta_1 = "title";
     if (in_array($kentta_1, $pakolliset) and empty($title)) {
