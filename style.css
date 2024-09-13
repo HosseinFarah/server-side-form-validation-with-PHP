@@ -12,6 +12,9 @@ footer {
   width: 100%;
 }
 
+.invalid-feedback {
+  font-size: 19px;
+}
 .topnav {
   overflow: hidden;
   background-color: #333;
